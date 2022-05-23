@@ -18,7 +18,7 @@ public enum OAuthAuthorizationGrant {
     ///
     /// - parameter grantType: The grant type URI of the extension grant
     /// - parameter parameters: A dictionary of parameters
-    case `extension`(String, [String: String])
+    case `extension`(String, [String: AnyObject])
 
     /// Returns the grant's parameters.
     ///
@@ -27,21 +27,21 @@ public enum OAuthAuthorizationGrant {
     /// - `.ResourceOwnerPasswordCredentials`: `username`, `password`
     /// - `.Refresh`: `refresh_token`
     /// - `.Extension`: `grantType`, `parameters`
-    public var parameters: [String: String] {
+    public var parameters: [String: AnyObject] {
         switch self {
         case let .resourceOwnerPasswordCredentials(username, password):
             return [
                 "grant_type": "password",
                 "username": username,
                 "password": password,
-            ]
+            ] as [String: AnyObject]
         case let .refreshToken(refreshToken):
             return [
                 "grant_type": "refresh_token",
                 "refresh_token": refreshToken,
-            ]
+            ] as [String: AnyObject]
         case .extension(let grantType, var parameters):
-            parameters["grant_type"] = grantType
+            parameters["grant_type"] = grantType as AnyObject
             return parameters
         }
     }
